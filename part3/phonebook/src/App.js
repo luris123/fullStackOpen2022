@@ -26,57 +26,48 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const ids =persons.map(person => {
-      return person.id
-    })
-    const nameObject = {
+    const newPerson = {
       name: newName,
-      number: newNumber,
-      id: Math.max(...ids) + 1
+      number: newNumber
     }
-    if (persons.some(e => e.name === newName)) {
-      if (window.confirm(newName + ' is already added to phonebook, replace the old number with a new one?')) {
-        console.log(nameObject.id -2)
 
-        personService
-          .update(nameObject.id -2, nameObject)
-          .then(res => {
-            setPersons(persons.map(p => p.id !== nameObject.id -2 ? p : res))
-          })
-          .catch(error => {
-            setErrorMessage(
-              `Information of '${nameObject.name}' has already been removed from server`
-            )
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
-          })
-            setNewName('')
-            setNewNumber('')
-            setMessage(
-              `Updated ${nameObject.name}`
-            )
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000)
-          
-      }
-    } 
-    else {
-      personService
-        .create(nameObject)
-        .then(initialPersons => {
-          setPersons(persons.concat(initialPersons))
-          setNewName('')
-          setNewNumber('')
-          setMessage(
-            `Added ${nameObject.name}`
-          )
+    setNewName('')
+    setNewNumber('')
+
+    const existingPerson = persons.find(p => p.name === newPerson.name)
+    if ( existingPerson ) {
+      const ok = window.confirm(`${existingPerson.name} is already added to phonebook, update the number?`)
+      if ( ok ) {
+
+        personService.update(existingPerson.id, {...existingPerson, number: newNumber }).then(savedPerson => {
+          setPersons(persons.map(p => p.id === existingPerson.id ? savedPerson : p ))
+          setMessage(`Updated info of ${savedPerson.name}`)
           setTimeout(() => {
             setMessage(null)
           }, 5000)
         })
+        
+        .catch(error => {
+          setErrorMessage(
+            `the person '${existingPerson.name}' was had already been from the server`, 'alert'
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id !== existingPerson.id))
+        })
+
+        return 
+      }
     }
+
+    personService.create(newPerson).then(savedPerson => {
+      setPersons(persons.concat(savedPerson))
+      setMessage(`Added ${savedPerson.name}`)
+    })
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   const handleNameChange = (event) => {
