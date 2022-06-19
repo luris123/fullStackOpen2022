@@ -65,6 +65,12 @@ const App = () => {
       setPersons(persons.concat(savedPerson))
       setMessage(`Added ${savedPerson.name}`)
     })
+    .catch(error => {
+      setErrorMessage('Person validation failed: given name (' + newPerson.name + ') is shorter than allowed length (3)')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    })
     setTimeout(() => {
       setMessage(null)
     }, 5000)
