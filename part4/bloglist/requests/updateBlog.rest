@@ -1,0 +1,8 @@
+PUT http://localhost:3003/api/blogs/62c6f3ab274072a5b007fd0d
+
+{
+    "title": "My sixth blog",
+    "author": "Matti",
+    "url": "http://www.google.com",
+    "likes": 0,
+}
