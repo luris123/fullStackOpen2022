@@ -1,4 +1,4 @@
-PUT http://localhost:3003/api/blogs/62c6f3ab274072a5b007fd0d
+PUT http://localhost:3003/api/blogs/62c850b2657a6ada207c17b8
 
 {
     "title": "My sixth blog",
