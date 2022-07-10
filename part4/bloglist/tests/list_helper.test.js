@@ -97,3 +97,9 @@ describe('favorite blog', () => {
     })
 
 }) 
+describe('most blogs', () => {
+    test('when list has more than one blog', () => {
+        const result = listHelper.mostBlogs(blogs)
+        expect(result).toEqual(Math.max(...blogs.map(o => o.author)))
+    })
+  })

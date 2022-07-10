@@ -16,8 +16,17 @@ const favoriteBlog = (blogs) => {
     return favorite
 }
 
+const mostBlogs = (blogs) => {
+    const most = Math.max(...blogs.map(o => o.author))
+        return most
+    }
+
+
+
+
   module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
   }
