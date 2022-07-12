@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Error from './components/Error'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,25 +12,17 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [message, setMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-  }
-    blogService.create(newBlog).then(returnedBlog => {
+  const blogFormRef = useRef()
+
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
+    blogService.create(blogObject).then(returnedBlog => {
       setBlogs(blogs.concat(returnedBlog))
-      setMessage(`a new blog ${newTitle} by ${newAuthor} added`)
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
+      setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+
     })
     .catch(error => {
       setErrorMessage(error.response.data.error)
@@ -77,20 +71,6 @@ const App = () => {
     }
   }
 
-  const handleTitleChange = async (event) => {
-    console.log(event.target.value)
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = async (event) => {
-    console.log(event.target.value)
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = async (event) => {
-    console.log(event.target.value)
-    setNewUrl(event.target.value)
-  }
 
   if (user === null ) {
     return (
@@ -133,13 +113,10 @@ const App = () => {
       <>
       logged in as {user.username} <button onClick={() => window.localStorage.removeItem('loggedBloglistUser')}>logout</button>
       </>
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>Title: <input value={newTitle} onChange={handleTitleChange} /></div>
-        <div>Author: <input value={newAuthor} onChange={handleAuthorChange} /></div>
-        <div>Url: <input value={newUrl} onChange={handleUrlChange} /></div>
-        <div><button type ="submit">create</button></div>
-        </form>
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm createBlog={addBlog} />
+      </Togglable>
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
