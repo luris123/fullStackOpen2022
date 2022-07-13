@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import Error from './components/Error'
 import BlogForm from './components/BlogForm'
@@ -17,7 +17,7 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const addBlog = (blogObject) => {
+  const createBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService.create(blogObject).then(returnedBlog => {
       setBlogs(blogs.concat(returnedBlog))
@@ -72,6 +72,8 @@ const App = () => {
   }
 
 
+
+
   if (user === null ) {
     return (
       <div>
@@ -113,15 +115,24 @@ const App = () => {
       <>
       logged in as {user.username} <button onClick={() => window.localStorage.removeItem('loggedBloglistUser')}>logout</button>
       </>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
-      </Togglable>
+        <div>
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+          <Togglable
+            buttonLabel="new blog"
+            cancelLabel="cancel"
+            ref={blogFormRef}
+          >
+            <BlogForm createBlog={createBlog} />
+          </Togglable>
+          <BlogList
+            blogs={blogs}
+            setBlogs={setBlogs}
+            user={user.username}
+          />
+        </div>
+      
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

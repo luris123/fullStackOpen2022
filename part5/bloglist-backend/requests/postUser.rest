@@ -2,13 +2,13 @@ POST http://localhost:3003/api/users
 content-type: application/json
 
 {
-    "username": "mluukkai",
-    "name": "Matti Luukkainen",
+    "username": "blogger",
+    "name": "Teppo Testaaja",
     "password": "salainen",
     "blogs": [
         {
-            "title": "uusi blogi",
-            "author": "mluukkai",
+            "title": "tepon blogi",
+            "author": "Teppo Testaaja",
             "url": "http://www.uusi.blogi.fi",
             "likes": 0
         }
