@@ -34,7 +34,7 @@ const Blog = ({blog, setBlogs, user}) => {
     if(!blog.user){
       return <></>
     }
-    if (user === blog.user?.username) {
+    else if(user === blog.user?.username) {
       return(
         <>
           <button>remove </button>
