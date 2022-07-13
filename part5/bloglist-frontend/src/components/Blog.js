@@ -54,6 +54,7 @@ const Blog = ({blog, setBlogs, user}) => {
       <div>{blog.title} <b>by</b> {blog.author} <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button></div>
       <div>{visible ? <><b>url:</b> {blog.url}</> : null}</div>
       <div>{visible ? <><b>likes:</b> {blog.likes}</> : null} {visible ? <button onClick={handleLike}>like</button> : null}</div>
+      <div>{visible ? <><b>added by:</b> {blog.user?.username}</> : null}</div>
       <div>{visible ? <RemoveButton></RemoveButton>: null}</div>
     </div>
   )
