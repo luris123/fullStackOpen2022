@@ -83,8 +83,7 @@ const App = () => {
         
         <form onSubmit={handleLogin}>
         <div>
-          username
-            <input
+          username <input
             type="text"
             value={username}
             name="Username"
@@ -92,8 +91,7 @@ const App = () => {
           />
         </div>
         <div>
-          password
-            <input
+          password <input
             type="password"
             value={password}
             name="Password"
@@ -113,7 +111,7 @@ const App = () => {
       <Notification message={message} />
       <Error error={errorMessage} />
       <>
-      logged in as {user.username} <button onClick={() => window.localStorage.removeItem('loggedBloglistUser')}>logout</button>
+      logged in as {user.username} <button onClick={() => {window.localStorage.removeItem('loggedBloglistUser'); setUser(null)}}>logout</button>
       </>
         <div>
 
