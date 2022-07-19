@@ -24,21 +24,21 @@ const App = () => {
       setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
 
     })
-    .catch(error => {
-      setErrorMessage(error.response.data.error)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
     setTimeout(() => {
       setMessage(null)
     }, 5000)
   }
-    
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -71,8 +71,14 @@ const App = () => {
     }
   }
 
-
-
+  const handleRemoveBlog = (title) => {
+    const blogToRemove = blogs.find(blog => blog.title === title)
+    if(window.confirm(`Are you sure you want to delete blog ${title}?`)){
+      blogService.remove(blogToRemove.id)
+      setBlogs(blogs.filter(blog => blog.title !== title))
+      setMessage(`blog ${title} removed`)
+    }
+  }
 
   if (user === null ) {
     return (
@@ -80,29 +86,29 @@ const App = () => {
         <h2>Log in to application</h2>
         <Error error={errorMessage} />
 
-        
+
         <form onSubmit={handleLogin}>
-        <div>
+          <div>
           username <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
+              type="text"
+              value={username}
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
+            />
+          </div>
+          <div>
           password <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
+            />
+          </div>
+          <button type="submit">login</button>
+        </form>
       </div>
-      
-      )
+
+    )
   }
 
   return (
@@ -113,24 +119,25 @@ const App = () => {
       <>
       logged in as {user.username} <button onClick={() => {window.localStorage.removeItem('loggedBloglistUser'); setUser(null)}}>logout</button>
       </>
-        <div>
+      <div>
 
-          <Togglable
-            buttonLabel="new blog"
-            cancelLabel="cancel"
-            ref={blogFormRef}
-          >
-            <BlogForm createBlog={createBlog} />
-          </Togglable>
-          <BlogList
-            blogs={blogs}
-            setBlogs={setBlogs}
-            user={user.username}
-          />
-        </div>
-      
+        <Togglable
+          buttonLabel="new blog"
+          cancelLabel="cancel"
+          ref={blogFormRef}
+        >
+          <BlogForm createBlog={createBlog} />
+        </Togglable>
+        <BlogList
+          blogs={blogs}
+          setBlogs={setBlogs}
+          handleRemoveBlog={handleRemoveBlog}
+          user={user.username}
+        />
+      </div>
+
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

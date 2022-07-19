@@ -1,13 +1,13 @@
 const Error = ({ error }) => {
-    if (error === null) {
-        return null
-    }
+  if (error === null) {
+    return null
+  }
 
-    return (
-        <div className="error">
-            {error}
-        </div>
-    )
+  return (
+    <div className="error">
+      {error}
+    </div>
+  )
 }
 
 export default Error

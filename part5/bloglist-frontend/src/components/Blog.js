@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, setBlogs, user}) => {
+const Blog = ({ blog, setBlogs, user, handleRemoveBlog }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -16,7 +16,7 @@ const Blog = ({blog, setBlogs, user}) => {
   }
 
   const handleLike = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     const updatedBlog = {
       id: blog.id,
@@ -24,20 +24,20 @@ const Blog = ({blog, setBlogs, user}) => {
       author: blog.author,
       title: blog.title,
       url: blog.url,
-    };
-    await blogService.update(updatedBlog.id, updatedBlog);
-    const blogs = await blogService.getAll();
-    setBlogs(blogs);
-  };
+    }
+    await blogService.update(updatedBlog.id, updatedBlog)
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
+  }
 
   const RemoveButton = () => {
     if(!blog.user){
       return <></>
     }
-    else if(user === blog.user?.username) {
+    else if(user === blog.user.username) {
       return(
         <>
-          <button>remove </button>
+          <button onClick={() => handleRemoveBlog(blog.title)}>remove</button>
         </>
       )
     } else {
@@ -45,8 +45,8 @@ const Blog = ({blog, setBlogs, user}) => {
         <>
         </>
       )
+    }
   }
-}
 
 
   return (
@@ -54,7 +54,7 @@ const Blog = ({blog, setBlogs, user}) => {
       <div>{blog.title} <b>by</b> {blog.author} <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button></div>
       <div>{visible ? <><b>url:</b> {blog.url}</> : null}</div>
       <div>{visible ? <><b>likes:</b> {blog.likes}</> : null} {visible ? <button onClick={handleLike}>like</button> : null}</div>
-      <div>{visible ? <><b>added by:</b> {blog.user?.username}</> : null}</div>
+      <div>{visible ? <><b>added by:</b> {blog.user.username}</> : null}</div>
       <div>{visible ? <RemoveButton></RemoveButton>: null}</div>
     </div>
   )
